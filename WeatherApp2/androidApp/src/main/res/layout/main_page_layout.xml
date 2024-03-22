@@ -73,7 +73,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:orientation="horizontal"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="40dp"
         android:layout_marginLeft="60dp"
         android:layout_marginRight="60dp">
 
@@ -241,7 +241,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="horizontal"
-        android:gravity="bottom|center"
+        android:gravity="center"
         android:layout_marginBottom="20dp">
 
         <LinearLayout
