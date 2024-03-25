@@ -27,6 +27,7 @@
         />
 
     <LinearLayout
+        android:id="@+id/backgroundImage"
         android:layout_width="match_parent"
         android:layout_height="415dp"
         android:background="@drawable/stormsky"
