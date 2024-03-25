@@ -18,6 +18,8 @@ import com.example.weatherapp.WeatherAPI
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.json.JSONArray
+import org.json.JSONObject
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,7 +30,9 @@ class MainActivity : ComponentActivity() {
         val api = WeatherAPI()
         CoroutineScope(Dispatchers.Main).launch {
 
-            test.text = api.collectDataFromCity("Limoges")
+            val json: JSONObject = JSONObject(api.collectDataFromCity("Limoges"));
+            val array = JSONObject(json.get("currentConditions").toString());
+            findViewById<TextView>(R.id.dayTemp).text = array.get("temp").toString()+"°C";
 
         }
 

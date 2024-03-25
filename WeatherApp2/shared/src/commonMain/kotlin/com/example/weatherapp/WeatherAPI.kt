@@ -15,7 +15,7 @@ class WeatherAPI {
 
         return try {
             val response: HttpResponse =
-                client.get("https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/$city?key=$apiKey")
+                client.get("https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Limoges?unitGroup=metric&key=HZEWWXN4GMPXSQV5GBCDPU3BA")
             response.bodyAsText()
         } finally {
             client.close()
