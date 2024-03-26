@@ -45,6 +45,7 @@ dependencies {
     implementation(libs.compose.material3)
     implementation(libs.androidx.activity.compose)
     implementation(libs.play.services.location)
+    implementation(libs.places)
     debugImplementation(libs.compose.ui.tooling)
     implementation(libs.ktor.client.okhttp)
 }
