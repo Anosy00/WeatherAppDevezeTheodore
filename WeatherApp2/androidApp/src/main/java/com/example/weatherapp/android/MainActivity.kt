@@ -1,9 +1,12 @@
 package com.example.weatherapp.android
 
+import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
+import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.SearchView
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -23,17 +26,30 @@ import kotlinx.coroutines.launch
 import org.json.JSONArray
 
 class MainActivity : ComponentActivity() {
+    @SuppressLint("WrongViewCast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_page_layout)
         val test : TextView = findViewById(R.id.test)
         val api = WeatherAPI()
-        CoroutineScope(Dispatchers.Main).launch {
+        /*CoroutineScope(Dispatchers.Main).launch {
 
             val json: JSONObject = JSONObject(api.collectDataFromCity("Limoges"));
             val array = JSONObject(json.get("currentConditions").toString());
             findViewById<TextView>(R.id.dayTemp).text = array.get("temp").toString()+"°C";
             setBackgroundImage(array.get("icon").toString(), findViewById<LinearLayout>(R.id.backgroundImage));
+        }*/
+
+        val editText: EditText = findViewById<EditText>(R.id.searchView);
+        editText.setOnEditorActionListener { _, _, _ ->
+            CoroutineScope(Dispatchers.Main).launch {
+                val json: JSONObject = JSONObject(api.collectDataFromCity(editText.text.toString()));
+                val array = JSONObject(json.get("currentConditions").toString());
+                findViewById<TextView>(R.id.dayTemp).text = array.get("temp").toString()+"°C";
+                setBackgroundImage(array.get("icon").toString(), findViewById<LinearLayout>(R.id.backgroundImage));
+            }
+            findViewById<TextView>(R.id.dayTemp).text = "Loading...";
+            true
         }
 
 
