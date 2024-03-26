@@ -44,4 +44,8 @@ class CurrentTime constructor(jsonObject: JSONObject){
     fun uv() :String{
         return currentWeather.get("uvindex").toString()
     }
+
+    fun icon(): String{
+        return currentWeather.get("icon").toString()
+    }
 }

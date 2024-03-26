@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
         val todayMaxTemp = findViewById<TextView>(R.id.todayMaxTemp)
         val windSpeed = findViewById<TextView>(R.id.windSpeed)
         val uvIndex = findViewById<TextView>(R.id.uvIndex)
-        val test : TextView = findViewById(R.id.test)
+        val backgroundImage = findViewById<LinearLayout>(R.id.backgroundImage)
         val api = WeatherAPI()
         CoroutineScope(Dispatchers.Main).launch {
             val json = JSONObject(api.collectDataFromCity("Limoges"));
@@ -44,14 +44,21 @@ class MainActivity : ComponentActivity() {
             todayMaxTemp.text = "Max. : " + currentTime.tempMax()
             windSpeed.text = currentTime.wind()
             uvIndex.text = currentTime.uv()
-        val editText: EditText = findViewById<EditText>(R.id.searchView);
-        editText.setOnEditorActionListener { _, _, _ ->
+            setBackgroundImage(currentTime.icon(), backgroundImage)
+        }
+
+        val editText = findViewById<EditText>(R.id.searchView)
+        editText.setOnEditorActionListener { v, actionId, event ->
             CoroutineScope(Dispatchers.Main).launch {
-                val json: JSONObject = JSONObject(api.collectDataFromCity(editText.text.toString()));
-                val array = JSONObject(json.get("currentConditions").toString());
-                findViewById<TextView>(R.id.dayTemp).text = array.get("temp").toString()+"°C";
-                setBackgroundImage(array.get("icon").toString(), findViewById<LinearLayout>(R.id.backgroundImage));
-            findViewById<TextView>(R.id.dayTemp).text = "Loading...";
+                val json = JSONObject(api.collectDataFromCity(editText.text.toString()));
+                val currentTime = CurrentTime(json)
+                locationWeather.text = currentTime.location()
+                todayTemp.text = currentTime.dayTemp()
+                todayMinTemp.text = "Min. : " + currentTime.tempMin()
+                todayMaxTemp.text = "Max. : " + currentTime.tempMax()
+                windSpeed.text = currentTime.wind()
+                uvIndex.text = currentTime.uv()
+                setBackgroundImage(currentTime.icon(), backgroundImage)
             }
             true
         }
