@@ -10,7 +10,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="My Weather App"
-        android:id="@+id/test"
         android:textSize="35dp"
         android:textStyle="bold"
         android:layout_marginTop="20dp"/>
@@ -33,13 +32,12 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/dayTemp"
+            android:id="@+id/locationWeather"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="25dp"
             android:fontFamily="cursive"
-            android:text="Paris, France"
             android:textSize="45dp" />
 
         <LinearLayout
@@ -60,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="19.5°C"
+                android:id="@+id/todayTemp"
                 android:textSize="65dp" />
         </LinearLayout>
 
@@ -70,7 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            android:text="Today Min Temp: 15°C"
+            android:id="@+id/todayMinTemp"
             android:textSize="20dp" />
 
         <TextView
@@ -78,7 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:text="Today Max Temp: 25°C"
+            android:id="@+id/todayMaxTemp"
             android:textSize="20dp" />
 
         <LinearLayout
@@ -104,7 +102,7 @@
                     android:layout_height="40dp"
                     android:layout_marginLeft="10dp"
                     android:gravity="center"
-                    android:text="5 km/h"
+                    android:id="@+id/windSpeed"
                     android:textSize="20dp" />
 
             </LinearLayout>
@@ -124,7 +122,7 @@
                     android:layout_height="40dp"
                     android:layout_marginLeft="10dp"
                     android:gravity="center"
-                    android:text="7"
+                    android:id="@+id/uvIndex"
                     android:textSize="20dp" />
 
             </LinearLayout>
