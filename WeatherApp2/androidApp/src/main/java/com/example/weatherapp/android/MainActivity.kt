@@ -26,7 +26,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_page_layout)
-        
         val test : TextView = findViewById(R.id.test)
         val api = WeatherAPI()
         CoroutineScope(Dispatchers.Main).launch {

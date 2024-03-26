@@ -15,16 +15,32 @@
         android:textStyle="bold"
         android:layout_marginTop="20dp"/>
 
-    <EditText
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:hint="Enter the city here"
-        android:background="@color/editTextColor"
-        android:layout_marginRight="30dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="25dp"
-        />
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:layout_marginBottom="12dp">
+        <EditText
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:id="@+id/searchView"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:background="@color/quantum_black_hint_text" />
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:contentDescription="TODO"
+            android:src="@drawable/search"
+            android:layout_gravity="center"/>
+
+    </LinearLayout>
+
+
 
     <LinearLayout
         android:id="@+id/backgroundImage"
