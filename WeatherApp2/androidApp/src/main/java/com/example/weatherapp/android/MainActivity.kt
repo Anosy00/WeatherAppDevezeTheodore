@@ -1,18 +1,19 @@
 package com.example.weatherapp.android
 
-import android.graphics.drawable.Drawable
+import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
-import android.util.Log
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.ComponentActivity
-import org.json.JSONObject
 import com.example.weatherapp.WeatherAPI
 import com.example.weatherapp.android.api.CurrentTime
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.json.JSONArray
+import org.json.JSONObject
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +30,18 @@ class MainActivity : ComponentActivity() {
         val todayMaxTemp = findViewById<TextView>(R.id.todayMaxTemp)
         val windSpeed = findViewById<TextView>(R.id.windSpeed)
         val uvIndex = findViewById<TextView>(R.id.uvIndex)
+        val forecastDay1 = findViewById<TextView>(R.id.forecastDay1)
+        val forecastDay2 = findViewById<TextView>(R.id.forecastDay2)
+        val forecastDay3 = findViewById<TextView>(R.id.forecastDay3)
+        val forecastDay4 = findViewById<TextView>(R.id.forecastDay4)
+        val forecastDay5 = findViewById<TextView>(R.id.forecastDay5)
+        val background = findViewById<LinearLayout>(R.id.backgroundImage)
+        val greyFilter = PorterDuffColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY)
+        background.background.setColorFilter(greyFilter)
+        val backgroundApp = findViewById<LinearLayout>(R.id.backgroundImageApp)
+        val greyDkFilter = PorterDuffColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY)
+        backgroundApp.background.setColorFilter(greyDkFilter)
+
         val api = WeatherAPI()
         CoroutineScope(Dispatchers.Main).launch {
             val json = JSONObject(api.collectDataFromCity("Limoges"));
@@ -39,6 +52,11 @@ class MainActivity : ComponentActivity() {
             todayMaxTemp.text = "Max. : " + currentTime.tempMax()
             windSpeed.text = currentTime.wind()
             uvIndex.text = currentTime.uv()
+            forecastDay1.text = currentTime.forecast()[0]
+            forecastDay2.text = currentTime.forecast()[1]
+            forecastDay3.text = currentTime.forecast()[2]
+            forecastDay4.text = currentTime.forecast()[3]
+            forecastDay5.text = currentTime.forecast()[4]
         }
     }
 
