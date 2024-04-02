@@ -24,6 +24,7 @@ import com.example.weatherapp.cityapi.CityAPI
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.json.JSONArray
 import org.json.JSONObject
 
 
@@ -105,7 +106,7 @@ class MainActivity : ComponentActivity() {
                     todayMaxTemp.text = "Max. : " + currentTime.tempMax()
                     windSpeed.text = currentTime.wind()
                     uvIndex.text = currentTime.uv()
-                    setBackgroundImage(currentTime.icon(), backgroundImage)
+                    setBackgroundImage(currentTime.icon(), background)
                 }
             }
 
@@ -124,7 +125,7 @@ class MainActivity : ComponentActivity() {
                 todayMaxTemp.text = "Max. : " + currentTime.tempMax()
                 windSpeed.text = currentTime.wind()
                 uvIndex.text = currentTime.uv()
-                setBackgroundImage(currentTime.icon(), backgroundImage)
+                setBackgroundImage(currentTime.icon(), background)
             }
             true
         }

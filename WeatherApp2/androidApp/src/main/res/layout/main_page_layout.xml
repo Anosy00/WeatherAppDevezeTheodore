@@ -3,16 +3,20 @@
              android:orientation="vertical"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-    android:background="@drawable/backgroundshape">
+    android:background="#000">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@drawable/backgroundapp"
             android:id="@+id/backgroundImageApp">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -22,16 +26,19 @@
             android:textStyle="bold"
             android:layout_marginTop="20dp"/>
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:hint="Enter the city here"
-            android:background="@color/editTextColor"
-            android:layout_marginRight="30dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="25dp"
-            />
+            <AutoCompleteTextView
+                android:id="@+id/searchView"
+                android:layout_width="300dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="30dp"
+                android:paddingLeft="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/shape"
+                android:autofillHints="Enter a location"
+                android:completionThreshold="3"
+                android:hint="Enter a location"/>
 
         <LinearLayout
             android:id="@+id/backgroundImage"
