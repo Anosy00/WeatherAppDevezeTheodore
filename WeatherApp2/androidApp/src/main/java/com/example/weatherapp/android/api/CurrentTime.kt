@@ -34,7 +34,6 @@ class CurrentTime constructor(jsonObject: JSONObject){
         } catch (e : Exception){
             return e.toString()
         }
-
     }
 
     fun wind() : String{
@@ -42,7 +41,30 @@ class CurrentTime constructor(jsonObject: JSONObject){
     }
 
     fun uv() :String{
-        return currentWeather.get("uvindex").toString()
+        val uv = currentWeather.getInt("uvindex")
+        if (uv<3){
+            return "Low"
+        }
+        else if (uv in 3..5){
+            return "Moderate"
+        }
+        else if (uv in 6..7){
+            return "High"
+        }
+        else if (uv in 8..10){
+            return "Very high"
+        }
+        return "Extreme"
+    }
+
+    fun forecast() : Array<String>{
+        val details = JSONArray(jsonApi.getString("days"))
+        val forecast5days = arrayOf(details.getJSONObject(1).getDouble("temp").toString()+"°C",
+            details.getJSONObject(2).getDouble("temp").toString()+"°C",
+            details.getJSONObject(3).getDouble("temp").toString()+"°C",
+            details.getJSONObject(4).getDouble("temp").toString()+"°C",
+            details.getJSONObject(5).getDouble("temp").toString()+"°C")
+        return forecast5days;
     }
 
     fun icon(): String{
