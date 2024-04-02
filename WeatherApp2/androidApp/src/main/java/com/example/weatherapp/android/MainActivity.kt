@@ -29,7 +29,8 @@ import org.json.JSONObject
 
 
 class MainActivity : ComponentActivity() {
-    @SuppressLint("WrongViewCast")
+    val api = WeatherAPI()
+    val cityApi = CityAPI()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_page_layout)
@@ -50,31 +51,18 @@ class MainActivity : ComponentActivity() {
         val forecastDay4 = findViewById<TextView>(R.id.forecastDay4)
         val forecastDay5 = findViewById<TextView>(R.id.forecastDay5)
         val background = findViewById<LinearLayout>(R.id.backgroundImage)
-        val greyFilter = PorterDuffColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY)
+
+        val greyFilter = PorterDuffColorFilter(Color.BLACK, PorterDuff.Mode.MULTIPLY)
         background.background.setColorFilter(greyFilter)
         val backgroundApp = findViewById<LinearLayout>(R.id.backgroundImageApp)
         val greyDkFilter = PorterDuffColorFilter(Color.DKGRAY, PorterDuff.Mode.MULTIPLY)
+        val greyFilterBk = PorterDuffColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY)
         backgroundApp.background.setColorFilter(greyDkFilter)
+        background.background.setColorFilter(greyFilterBk)
 
-        val api = WeatherAPI()
-        val cityApi = CityAPI()
+
         val searchBar: AutoCompleteTextView = findViewById(R.id.searchView)
-        CoroutineScope(Dispatchers.Main).launch {
 
-            val json = JSONObject(api.collectDataFromCity("Limoges"));
-            val currentTime = CurrentTime(json)
-            locationWeather.text = currentTime.location()
-            todayTemp.text = currentTime.dayTemp()
-            todayMinTemp.text = "Min. : " + currentTime.tempMin()
-            todayMaxTemp.text = "Max. : " + currentTime.tempMax()
-            windSpeed.text = currentTime.wind()
-            uvIndex.text = currentTime.uv()
-            forecastDay1.text = currentTime.forecast()[0]
-            forecastDay2.text = currentTime.forecast()[1]
-            forecastDay3.text = currentTime.forecast()[2]
-            forecastDay4.text = currentTime.forecast()[3]
-            forecastDay5.text = currentTime.forecast()[4]
-        }
 
         val searched = ArrayList<String>();
         searchBar.doOnTextChanged() { text, start, before, count ->
@@ -92,6 +80,7 @@ class MainActivity : ComponentActivity() {
             catch (e: Exception){
                 Log.d("Error", e.toString())
             }
+
 
         }
 
@@ -126,10 +115,26 @@ class MainActivity : ComponentActivity() {
                 windSpeed.text = currentTime.wind()
                 uvIndex.text = currentTime.uv()
                 setBackgroundImage(currentTime.icon(), background)
+                background.background.setColorFilter(greyFilterBk)
             }
             true
         }
+        CoroutineScope(Dispatchers.Main).launch {
 
+            val json = JSONObject(api.collectDataFromCity("Limoges"));
+            val currentTime = CurrentTime(json)
+            locationWeather.text = currentTime.location()
+            todayTemp.text = currentTime.dayTemp()
+            todayMinTemp.text = "Min. : " + currentTime.tempMin()
+            todayMaxTemp.text = "Max. : " + currentTime.tempMax()
+            windSpeed.text = currentTime.wind()
+            uvIndex.text = currentTime.uv()
+            forecastDay1.text = currentTime.forecast()[0]
+            forecastDay2.text = currentTime.forecast()[1]
+            forecastDay3.text = currentTime.forecast()[2]
+            forecastDay4.text = currentTime.forecast()[3]
+            forecastDay5.text = currentTime.forecast()[4]
+        }
 
     }
 
@@ -145,5 +150,9 @@ class MainActivity : ComponentActivity() {
             "clear-day" -> backgroundImage.background = getDrawable(R.drawable.sunnysky)
             "clear-night" -> backgroundImage.background = getDrawable(R.drawable.nightsky);
         }
+    }
+
+    fun forecastInfo(){
+
     }
 }
