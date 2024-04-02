@@ -20,21 +20,25 @@
         android:layout_height="60dp"
         android:orientation="horizontal"
         android:layout_marginBottom="12dp">
-        <EditText
+        <AutoCompleteTextView
             android:id="@+id/searchView"
             android:layout_width="300dp"
             android:layout_height="match_parent"
             android:layout_marginEnd="10dp"
             android:layout_marginStart="30dp"
+            android:paddingLeft="10dp"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
-            android:background="@color/quantum_black_hint_text"
+            android:background="@drawable/shape"
             android:autofillHints="Enter a location"
+            android:completionThreshold="3"
+            
             android:hint="Enter a location"/>
 
-        <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+        <ImageButton
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:background="@drawable/shape"
             android:contentDescription="TODO"
             android:src="@drawable/search"
             android:layout_gravity="center"/>

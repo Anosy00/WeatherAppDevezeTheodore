@@ -12,7 +12,6 @@ class WeatherAPI {
     private val apiKey = "HZEWWXN4GMPXSQV5GBCDPU3BA";
     suspend fun collectDataFromCity(city : String): String {
         val client = HttpClient()
-
         return try {
             val response: HttpResponse =
                 client.get("https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/$city?unitGroup=metric&key=$apiKey")

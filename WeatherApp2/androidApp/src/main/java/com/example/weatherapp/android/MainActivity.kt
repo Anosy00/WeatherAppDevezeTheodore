@@ -4,14 +4,21 @@ import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.SearchView
 import android.widget.TextView
 import androidx.activity.ComponentActivity
+import androidx.core.widget.addTextChangedListener
+import androidx.core.widget.doOnTextChanged
 import org.json.JSONObject
 import com.example.weatherapp.WeatherAPI
 import com.example.weatherapp.android.api.CurrentTime
+import com.example.weatherapp.cityapi.CityAPI
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -35,7 +42,10 @@ class MainActivity : ComponentActivity() {
         val uvIndex = findViewById<TextView>(R.id.uvIndex)
         val backgroundImage = findViewById<LinearLayout>(R.id.backgroundImage)
         val api = WeatherAPI()
+        val cityApi = CityAPI()
+        val searchBar: AutoCompleteTextView = findViewById(R.id.searchView)
         CoroutineScope(Dispatchers.Main).launch {
+
             val json = JSONObject(api.collectDataFromCity("Limoges"));
             val currentTime = CurrentTime(json)
             locationWeather.text = currentTime.location()
@@ -47,10 +57,48 @@ class MainActivity : ComponentActivity() {
             setBackgroundImage(currentTime.icon(), backgroundImage)
         }
 
-        val editText = findViewById<EditText>(R.id.searchView)
-        editText.setOnEditorActionListener { v, actionId, event ->
+        val searched = ArrayList<String>();
+        searchBar.doOnTextChanged() { text, start, before, count ->
+            try {
+                CoroutineScope(Dispatchers.Main).launch {
+                    searched.clear()
+                    val jsonArray = JSONArray(cityApi.autoCompleteCity(text.toString()));
+                    for (i in 0 until jsonArray.length()) {
+                        searched.add(jsonArray.getJSONObject(i).getString("nom"));
+                    }
+                    val adapter = ArrayAdapter(this@MainActivity, android.R.layout.simple_list_item_1, searched)
+                    searchBar.setAdapter(adapter)
+                }
+            }
+            catch (e: Exception){
+                Log.d("Error", e.toString())
+            }
+
+        }
+
+        searchBar.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    val json = JSONObject(api.collectDataFromCity(searchBar.text.toString()));
+                    val currentTime = CurrentTime(json)
+                    locationWeather.text = currentTime.location()
+                    todayTemp.text = currentTime.dayTemp()
+                    todayMinTemp.text = "Min. : " + currentTime.tempMin()
+                    todayMaxTemp.text = "Max. : " + currentTime.tempMax()
+                    windSpeed.text = currentTime.wind()
+                    uvIndex.text = currentTime.uv()
+                    setBackgroundImage(currentTime.icon(), backgroundImage)
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // Do nothing
+            }
+        }
+
+        searchBar.setOnEditorActionListener { v, actionId, event ->
             CoroutineScope(Dispatchers.Main).launch {
-                val json = JSONObject(api.collectDataFromCity(editText.text.toString()));
+                val json = JSONObject(api.collectDataFromCity(searchBar.text.toString()));
                 val currentTime = CurrentTime(json)
                 locationWeather.text = currentTime.location()
                 todayTemp.text = currentTime.dayTemp()
@@ -62,6 +110,8 @@ class MainActivity : ComponentActivity() {
             }
             true
         }
+
+
     }
 
     fun setBackgroundImage(icon: String, backgroundImage: LinearLayout){
