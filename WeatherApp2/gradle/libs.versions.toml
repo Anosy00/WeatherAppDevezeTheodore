@@ -10,6 +10,7 @@ playServicesLocation = "21.2.0"
 places = "3.4.0"
 lifecycle-runtime-ktx = "2.7.0"
 compose-bom = "2023.08.00"
+material = "1.11.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -29,6 +30,7 @@ compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = 
 ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

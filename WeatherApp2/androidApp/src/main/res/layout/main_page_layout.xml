@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
     android:background="#000">
@@ -17,28 +18,58 @@
             android:background="@drawable/backgroundapp"
             android:id="@+id/backgroundImageApp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="My Weather App"
-            android:textSize="35dp"
-            android:textStyle="bold"
-            android:layout_marginTop="20dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="My Weather App"
+                    android:textSize="35sp"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="35dp"
+                    android:layout_marginLeft="30dp"/>
 
-            <AutoCompleteTextView
-                android:id="@+id/searchView"
-                android:layout_width="300dp"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="30dp"
-                android:paddingLeft="10dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                android:background="@drawable/shape"
-                android:autofillHints="Enter a location"
-                android:completionThreshold="3"
-                android:hint="Enter a location"/>
+                <ImageButton
+                    android:id="@+id/buttonChange"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/star"
+                    android:layout_gravity="center"
+                    android:background="@drawable/shape"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <AutoCompleteTextView
+                    android:id="@+id/searchView"
+                    android:layout_width="300dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="30dp"
+                    android:paddingLeft="10dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@drawable/shape"
+                    android:autofillHints="Enter a location"
+                    android:completionThreshold="3"
+                    android:hint="Enter a location"/>
+
+                <ImageButton
+                    android:id="@+id/searchButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/search"
+                    android:background="@color/cardview_shadow_end_color"
+                    android:layout_gravity="center"/>
+
+            </LinearLayout>
+
+
 
         <LinearLayout
             android:id="@+id/backgroundImage"
@@ -107,7 +138,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    >
 
                     <ImageView
                         android:layout_width="40dp"
@@ -127,7 +159,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="50dp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    tools:ignore="UseCompoundDrawables">
 
                     <ImageView
                         android:layout_width="40dp"
