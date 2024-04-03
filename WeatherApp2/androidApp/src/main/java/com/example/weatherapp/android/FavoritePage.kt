@@ -3,9 +3,11 @@ package com.example.weatherapp.android
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ListView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AlertDialog
@@ -27,6 +29,7 @@ import org.json.JSONObject
 class FavoritePage : ComponentActivity() {
     val cityApi = CityAPI()
     val api = WeatherAPI()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_favorite)
@@ -37,12 +40,16 @@ class FavoritePage : ComponentActivity() {
             startActivity(intent)
         }
 
+        val listView : ListView = findViewById(R.id.listView)
+        val adapter = ArrayAdapter<String>(this@FavoritePage, android.R.layout.simple_list_item_1)
+        listView.adapter = adapter
         val buttonAdd: ImageButton = findViewById(R.id.buttonAdd)
         buttonAdd.setOnClickListener {
 
             CoroutineScope(Dispatchers.Main).launch {
                 try {
                     val json = JSONObject(api.collectDataFromCity(searchBar.text.toString()));
+                    adapter.add(searchBar.text.toString())
                 }
                 catch (e: Exception) {
                     val builder = AlertDialog.Builder(this@FavoritePage)
