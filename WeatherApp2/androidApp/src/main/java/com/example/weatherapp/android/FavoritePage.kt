@@ -39,9 +39,9 @@ class FavoritePage : ComponentActivity() {
             val intent = Intent(this@FavoritePage, MainActivity::class.java)
             startActivity(intent)
         }
-
+        val dataList = ArrayList<String>()
         val listView : ListView = findViewById(R.id.listView)
-        val adapter = ArrayAdapter<String>(this@FavoritePage, android.R.layout.simple_list_item_1)
+        val adapter = ArrayAdapter<String>(this@FavoritePage, android.R.layout.simple_list_item_1, dataList)
         listView.adapter = adapter
         val buttonAdd: ImageButton = findViewById(R.id.buttonAdd)
         buttonAdd.setOnClickListener {
@@ -49,7 +49,8 @@ class FavoritePage : ComponentActivity() {
             CoroutineScope(Dispatchers.Main).launch {
                 try {
                     val json = JSONObject(api.collectDataFromCity(searchBar.text.toString()));
-                    adapter.add(searchBar.text.toString())
+                    dataList.add(searchBar.text.toString())
+                    adapter.notifyDataSetChanged()
                 }
                 catch (e: Exception) {
                     val builder = AlertDialog.Builder(this@FavoritePage)
@@ -62,6 +63,17 @@ class FavoritePage : ComponentActivity() {
             }
 
 
+        }
+
+        listView.setOnItemClickListener { parent, view, position, id ->
+            // Obtenez l'élément cliqué en utilisant sa position dans la liste
+            val selectedItem = dataList[position]
+
+            // Supprimez l'élément de votre dataset
+            dataList.removeAt(position)
+
+            // Notifiez à l'adaptateur que les données ont changé
+            (listView.adapter as ArrayAdapter<*>).notifyDataSetChanged()
         }
     }
 
