@@ -29,6 +29,7 @@ import org.json.JSONObject
 class FavoritePage : ComponentActivity() {
     val cityApi = CityAPI()
     val api = WeatherAPI()
+    val dataList = ArrayList<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +40,7 @@ class FavoritePage : ComponentActivity() {
             val intent = Intent(this@FavoritePage, MainActivity::class.java)
             startActivity(intent)
         }
-        val dataList = ArrayList<String>()
+
         val listView : ListView = findViewById(R.id.listView)
         val adapter = ArrayAdapter<String>(this@FavoritePage, android.R.layout.simple_list_item_1, dataList)
         listView.adapter = adapter
