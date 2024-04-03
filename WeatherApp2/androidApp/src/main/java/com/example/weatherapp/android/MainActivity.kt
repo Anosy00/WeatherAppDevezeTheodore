@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
@@ -11,7 +12,9 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.SearchView
 import android.widget.TextView
@@ -34,6 +37,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_page_layout)
+        val button: ImageButton = findViewById(R.id.buttonChange)
+        button.setOnClickListener {
+            val intent = Intent(this@MainActivity, FavoritePage::class.java)
+            startActivity(intent)
+        }
 
         firstConnection()
     }
@@ -51,6 +59,7 @@ class MainActivity : ComponentActivity() {
         val forecastDay4 = findViewById<TextView>(R.id.forecastDay4)
         val forecastDay5 = findViewById<TextView>(R.id.forecastDay5)
         val background = findViewById<LinearLayout>(R.id.backgroundImage)
+        val searchButton : ImageButton = findViewById(R.id.searchButton)
 
         val greyFilter = PorterDuffColorFilter(Color.BLACK, PorterDuff.Mode.MULTIPLY)
         background.background.setColorFilter(greyFilter)
@@ -136,6 +145,25 @@ class MainActivity : ComponentActivity() {
             forecastDay5.text = currentTime.forecast()[4]
         }
 
+        searchButton.setOnClickListener {
+            CoroutineScope(Dispatchers.Main).launch {
+                val json = JSONObject(api.collectDataFromCity(searchBar.text.toString()));
+                val currentTime = CurrentTime(json)
+                locationWeather.text = currentTime.location()
+                todayTemp.text = currentTime.dayTemp()
+                todayMinTemp.text = "Min. : " + currentTime.tempMin()
+                todayMaxTemp.text = "Max. : " + currentTime.tempMax()
+                windSpeed.text = currentTime.wind()
+                uvIndex.text = currentTime.uv()
+                forecastDay1.text = currentTime.forecast()[0]
+                forecastDay2.text = currentTime.forecast()[1]
+                forecastDay3.text = currentTime.forecast()[2]
+                forecastDay4.text = currentTime.forecast()[3]
+                forecastDay5.text = currentTime.forecast()[4]
+                setBackgroundImage(currentTime.icon(), background)
+                background.background.setColorFilter(greyFilterBk)
+            }
+        }
     }
 
     fun setBackgroundImage(icon: String, backgroundImage: LinearLayout){
