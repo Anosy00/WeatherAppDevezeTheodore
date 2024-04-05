@@ -19,6 +19,7 @@ import android.widget.LinearLayout
 import android.widget.SearchView
 import android.widget.TextView
 import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doOnTextChanged
 import com.example.weatherapp.WeatherAPI
@@ -115,7 +116,37 @@ class MainActivity : ComponentActivity() {
 
         searchBar.setOnEditorActionListener { v, actionId, event ->
             CoroutineScope(Dispatchers.Main).launch {
-                val json = JSONObject(api.collectDataFromCity(searchBar.text.toString()));
+                try {
+                    val json = JSONObject(api.collectDataFromCity(searchBar.text.toString()));
+                    val currentTime = CurrentTime(json)
+                    locationWeather.text = currentTime.location()
+                    todayTemp.text = currentTime.dayTemp()
+                    todayMinTemp.text = "Min. : " + currentTime.tempMin()
+                    todayMaxTemp.text = "Max. : " + currentTime.tempMax()
+                    windSpeed.text = currentTime.wind()
+                    uvIndex.text = currentTime.uv()
+                    setBackgroundImage(currentTime.icon(), background)
+                    background.background.setColorFilter(greyFilterBk)
+                }
+                catch (e: Exception) {
+                    locationWeather.text = "City not found"
+                    todayTemp.text = ""
+                    todayMinTemp.text = ""
+                    todayMaxTemp.text = ""
+                    windSpeed.text = ""
+                    uvIndex.text = ""
+                    forecastDay1.text = ""
+                    forecastDay2.text = ""
+                    forecastDay3.text = ""
+                    forecastDay4.text = ""
+                    forecastDay5.text = ""
+                }
+            }
+            true
+        }
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                val json = JSONObject(api.collectDataFromCity("Limoges"));
                 val currentTime = CurrentTime(json)
                 locationWeather.text = currentTime.location()
                 todayTemp.text = currentTime.dayTemp()
@@ -123,26 +154,20 @@ class MainActivity : ComponentActivity() {
                 todayMaxTemp.text = "Max. : " + currentTime.tempMax()
                 windSpeed.text = currentTime.wind()
                 uvIndex.text = currentTime.uv()
-                setBackgroundImage(currentTime.icon(), background)
-                background.background.setColorFilter(greyFilterBk)
+                forecastDay1.text = currentTime.forecast()[0]
+                forecastDay2.text = currentTime.forecast()[1]
+                forecastDay3.text = currentTime.forecast()[2]
+                forecastDay4.text = currentTime.forecast()[3]
+                forecastDay5.text = currentTime.forecast()[4]
             }
-            true
-        }
-        CoroutineScope(Dispatchers.Main).launch {
+            catch (e: Exception) {
+                val builder = AlertDialog.Builder(this@MainActivity)
+                builder.setTitle("Error")
+                builder.setMessage("City not found")
+                builder.setPositiveButton("OK") { dialog, which -> }
+                builder.show()
+            }
 
-            val json = JSONObject(api.collectDataFromCity("Limoges"));
-            val currentTime = CurrentTime(json)
-            locationWeather.text = currentTime.location()
-            todayTemp.text = currentTime.dayTemp()
-            todayMinTemp.text = "Min. : " + currentTime.tempMin()
-            todayMaxTemp.text = "Max. : " + currentTime.tempMax()
-            windSpeed.text = currentTime.wind()
-            uvIndex.text = currentTime.uv()
-            forecastDay1.text = currentTime.forecast()[0]
-            forecastDay2.text = currentTime.forecast()[1]
-            forecastDay3.text = currentTime.forecast()[2]
-            forecastDay4.text = currentTime.forecast()[3]
-            forecastDay5.text = currentTime.forecast()[4]
         }
 
         searchButton.setOnClickListener {
