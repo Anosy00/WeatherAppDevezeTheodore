@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -77,14 +78,51 @@ class MainActivity : ComponentActivity() {
         val searched = ArrayList<String>();
         searchBar.doOnTextChanged() { text, start, before, count ->
             try {
-                CoroutineScope(Dispatchers.Main).launch {
-                    searched.clear()
-                    val jsonArray = JSONArray(cityApi.autoCompleteCity(text.toString()));
-                    for (i in 0 until jsonArray.length()) {
-                        searched.add(jsonArray.getJSONObject(i).getString("nom"));
+                if (readCityNameFromFile() == "false"){
+                    CoroutineScope(Dispatchers.Main).launch {
+                        try {
+                            val json = JSONObject(api.collectDataFromCity("Limoges"));
+                            val currentTime = CurrentTime(json)
+                            locationWeather.text = currentTime.location()
+                            todayTemp.text = currentTime.dayTemp()
+                            todayMinTemp.text = "Min. : " + currentTime.tempMin()
+                            todayMaxTemp.text = "Max. : " + currentTime.tempMax()
+                            windSpeed.text = currentTime.wind()
+                            uvIndex.text = currentTime.uv()
+                            forecastDay1.text = currentTime.forecast()[0]
+                            forecastDay2.text = currentTime.forecast()[1]
+                            forecastDay3.text = currentTime.forecast()[2]
+                            forecastDay4.text = currentTime.forecast()[3]
+                            forecastDay5.text = currentTime.forecast()[4]
+                        }
+                        catch (e: Exception) {
+                            val builder = AlertDialog.Builder(this@MainActivity)
+                            builder.setTitle("Error")
+                            builder.setMessage("City not found")
+                            builder.setPositiveButton("OK") { dialog, which -> }
+                            builder.show()
+                        }
                     }
-                    val adapter = ArrayAdapter(this@MainActivity, android.R.layout.simple_list_item_1, searched)
-                    searchBar.setAdapter(adapter)
+                }
+                else {
+                    val stringJson = readCityNameFromFile();
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val json = JSONObject(api.collectDataFromCity(stringJson));
+                        val currentTime = CurrentTime(json)
+                        locationWeather.text = currentTime.location()
+                        todayTemp.text = currentTime.dayTemp()
+                        todayMinTemp.text = "Min. : " + currentTime.tempMin()
+                        todayMaxTemp.text = "Max. : " + currentTime.tempMax()
+                        windSpeed.text = currentTime.wind()
+                        uvIndex.text = currentTime.uv()
+                        forecastDay1.text = currentTime.forecast()[0]
+                        forecastDay2.text = currentTime.forecast()[1]
+                        forecastDay3.text = currentTime.forecast()[2]
+                        forecastDay4.text = currentTime.forecast()[3]
+                        forecastDay5.text = currentTime.forecast()[4]
+                        setBackgroundImage(currentTime.icon(), background)
+                        background.background.setColorFilter(greyFilterBk)
+                    }
                 }
             }
             catch (e: Exception){
@@ -96,16 +134,51 @@ class MainActivity : ComponentActivity() {
 
         searchBar.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                CoroutineScope(Dispatchers.Main).launch {
-                    val json = JSONObject(api.collectDataFromCity(searchBar.text.toString()));
-                    val currentTime = CurrentTime(json)
-                    locationWeather.text = currentTime.location()
-                    todayTemp.text = currentTime.dayTemp()
-                    todayMinTemp.text = "Min. : " + currentTime.tempMin()
-                    todayMaxTemp.text = "Max. : " + currentTime.tempMax()
-                    windSpeed.text = currentTime.wind()
-                    uvIndex.text = currentTime.uv()
-                    setBackgroundImage(currentTime.icon(), background)
+                if (readCityNameFromFile() == "false"){
+                    CoroutineScope(Dispatchers.Main).launch {
+                        try {
+                            val json = JSONObject(api.collectDataFromCity("Limoges"));
+                            val currentTime = CurrentTime(json)
+                            locationWeather.text = currentTime.location()
+                            todayTemp.text = currentTime.dayTemp()
+                            todayMinTemp.text = "Min. : " + currentTime.tempMin()
+                            todayMaxTemp.text = "Max. : " + currentTime.tempMax()
+                            windSpeed.text = currentTime.wind()
+                            uvIndex.text = currentTime.uv()
+                            forecastDay1.text = currentTime.forecast()[0]
+                            forecastDay2.text = currentTime.forecast()[1]
+                            forecastDay3.text = currentTime.forecast()[2]
+                            forecastDay4.text = currentTime.forecast()[3]
+                            forecastDay5.text = currentTime.forecast()[4]
+                        }
+                        catch (e: Exception) {
+                            val builder = AlertDialog.Builder(this@MainActivity)
+                            builder.setTitle("Error")
+                            builder.setMessage("City not found")
+                            builder.setPositiveButton("OK") { dialog, which -> }
+                            builder.show()
+                        }
+                    }
+                }
+                else {
+                    val stringJson = readCityNameFromFile();
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val json = JSONObject(api.collectDataFromCity(stringJson));
+                        val currentTime = CurrentTime(json)
+                        locationWeather.text = currentTime.location()
+                        todayTemp.text = currentTime.dayTemp()
+                        todayMinTemp.text = "Min. : " + currentTime.tempMin()
+                        todayMaxTemp.text = "Max. : " + currentTime.tempMax()
+                        windSpeed.text = currentTime.wind()
+                        uvIndex.text = currentTime.uv()
+                        forecastDay1.text = currentTime.forecast()[0]
+                        forecastDay2.text = currentTime.forecast()[1]
+                        forecastDay3.text = currentTime.forecast()[2]
+                        forecastDay4.text = currentTime.forecast()[3]
+                        forecastDay5.text = currentTime.forecast()[4]
+                        setBackgroundImage(currentTime.icon(), background)
+                        background.background.setColorFilter(greyFilterBk)
+                    }
                 }
             }
 
@@ -118,6 +191,7 @@ class MainActivity : ComponentActivity() {
             CoroutineScope(Dispatchers.Main).launch {
                 try {
                     val json = JSONObject(api.collectDataFromCity(searchBar.text.toString()));
+                    writeCityNameToFile(api.collectDataFromCity(searchBar.text.toString()))
                     val currentTime = CurrentTime(json)
                     locationWeather.text = currentTime.location()
                     todayTemp.text = currentTime.dayTemp()
@@ -144,9 +218,38 @@ class MainActivity : ComponentActivity() {
             }
             true
         }
-        CoroutineScope(Dispatchers.Main).launch {
-            try {
-                val json = JSONObject(api.collectDataFromCity("Limoges"));
+        if (readCityNameFromFile() == "false"){
+            CoroutineScope(Dispatchers.Main).launch {
+                try {
+                    val string = api.collectDataFromCity("Limoges")
+                    val json = JSONObject(string);
+                    val currentTime = CurrentTime(json)
+                    locationWeather.text = currentTime.location()
+                    todayTemp.text = currentTime.dayTemp()
+                    todayMinTemp.text = "Min. : " + currentTime.tempMin()
+                    todayMaxTemp.text = "Max. : " + currentTime.tempMax()
+                    windSpeed.text = currentTime.wind()
+                    uvIndex.text = currentTime.uv()
+                    forecastDay1.text = currentTime.forecast()[0]
+                    forecastDay2.text = currentTime.forecast()[1]
+                    forecastDay3.text = currentTime.forecast()[2]
+                    forecastDay4.text = currentTime.forecast()[3]
+                    forecastDay5.text = currentTime.forecast()[4]
+                    writeCityNameToFile(string)
+                }
+                catch (e: Exception) {
+                    val builder = AlertDialog.Builder(this@MainActivity)
+                    builder.setTitle("Error")
+                    builder.setMessage("City not found")
+                    builder.setPositiveButton("OK") { dialog, which -> }
+                    builder.show()
+                }
+        }
+        }
+        else {
+            val stringJson = readCityNameFromFile();
+            CoroutineScope(Dispatchers.Main).launch {
+                val json = JSONObject(stringJson);
                 val currentTime = CurrentTime(json)
                 locationWeather.text = currentTime.location()
                 todayTemp.text = currentTime.dayTemp()
@@ -159,15 +262,9 @@ class MainActivity : ComponentActivity() {
                 forecastDay3.text = currentTime.forecast()[2]
                 forecastDay4.text = currentTime.forecast()[3]
                 forecastDay5.text = currentTime.forecast()[4]
+                setBackgroundImage(currentTime.icon(), background)
+                background.background.setColorFilter(greyFilterBk)
             }
-            catch (e: Exception) {
-                val builder = AlertDialog.Builder(this@MainActivity)
-                builder.setTitle("Error")
-                builder.setMessage("City not found")
-                builder.setPositiveButton("OK") { dialog, which -> }
-                builder.show()
-            }
-
         }
 
         searchButton.setOnClickListener {
@@ -203,6 +300,28 @@ class MainActivity : ComponentActivity() {
             "clear-day" -> backgroundImage.background = getDrawable(R.drawable.sunnysky)
             "clear-night" -> backgroundImage.background = getDrawable(R.drawable.nightsky);
         }
+    }
+
+    private fun writeCityNameToFile(jsonString: String) {
+        try {
+            openFileOutput("city.txt", Context.MODE_PRIVATE).use {
+                it.write(jsonString.toByteArray())
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun readCityNameFromFile(): String {
+        var json = ""
+        try {
+            openFileInput("city.txt").use {
+                json = it.bufferedReader().readText()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return if (json.isNotBlank()) json else false.toString()
     }
 
     fun forecastInfo(){
