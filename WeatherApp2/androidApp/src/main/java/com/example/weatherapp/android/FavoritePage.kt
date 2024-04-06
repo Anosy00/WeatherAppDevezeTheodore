@@ -45,13 +45,32 @@ class FavoritePage : ComponentActivity() {
         val adapter = ArrayAdapter<String>(this@FavoritePage, android.R.layout.simple_list_item_1, dataList)
         listView.adapter = adapter
         val buttonAdd: ImageButton = findViewById(R.id.buttonAdd)
+        if (readCityNameFromFile() != false.toString()) {
+            val list = readCityNameFromFile().split("-")
+            for (item in list) {
+                dataList.add(item)
+            }
+            dataList.remove(dataList.last())
+            adapter.notifyDataSetChanged()
+        }
         buttonAdd.setOnClickListener {
 
             CoroutineScope(Dispatchers.Main).launch {
                 try {
-                    val json = JSONObject(api.collectDataFromCity(searchBar.text.toString()));
-                    dataList.add(searchBar.text.toString())
-                    adapter.notifyDataSetChanged()
+                    if (searchBar.text.toString() in dataList) {
+                        val builder = AlertDialog.Builder(this@FavoritePage)
+                        builder.setTitle("Error")
+                        builder.setMessage("City already added")
+                        builder.setPositiveButton("OK") { dialog, which -> }
+                        builder.show()
+                    }
+                    else{
+                        val json = JSONObject(api.collectDataFromCity(searchBar.text.toString()));
+                        dataList.add(searchBar.text.toString())
+                        adapter.notifyDataSetChanged()
+                        writeCityNameToFile(dataList)
+                    }
+
                 }
                 catch (e: Exception) {
                     val builder = AlertDialog.Builder(this@FavoritePage)
@@ -67,15 +86,36 @@ class FavoritePage : ComponentActivity() {
         }
 
         listView.setOnItemClickListener { parent, view, position, id ->
-            // Obtenez l'élément cliqué en utilisant sa position dans la liste
             val selectedItem = dataList[position]
-
-            // Supprimez l'élément de votre dataset
             dataList.removeAt(position)
-
-            // Notifiez à l'adaptateur que les données ont changé
+            writeCityNameToFile(dataList)
             (listView.adapter as ArrayAdapter<*>).notifyDataSetChanged()
         }
+    }
+
+    private fun writeCityNameToFile(listFavorite: ArrayList<String>) {
+        try {
+            openFileOutput("favorite.txt", Context.MODE_PRIVATE).use {
+                for (item in listFavorite){
+                    it.write(item.toByteArray())
+                    it.write("-".toByteArray())
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun readCityNameFromFile(): String {
+        var list = ""
+        try {
+            openFileInput("favorite.txt").use {
+                list = it.bufferedReader().readText()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return if (list.isNotBlank()) list else false.toString()
     }
 
 
