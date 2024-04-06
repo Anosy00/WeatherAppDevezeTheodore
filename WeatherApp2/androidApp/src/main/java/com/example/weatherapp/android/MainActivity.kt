@@ -114,7 +114,7 @@ class MainActivity : ComponentActivity() {
                 else {
                     val stringJson = readCityNameFromFile();
                     CoroutineScope(Dispatchers.Main).launch {
-                        val json = JSONObject(api.collectDataFromCity(stringJson));
+                        val json = JSONObject(stringJson);
                         val currentTime = CurrentTime(json)
                         locationWeather.text = currentTime.location()
                         todayTemp.text = currentTime.dayTemp()
