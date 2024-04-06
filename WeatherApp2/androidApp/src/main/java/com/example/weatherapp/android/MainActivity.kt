@@ -12,6 +12,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.SearchView
 import android.widget.TextView
@@ -51,6 +52,7 @@ class MainActivity : ComponentActivity() {
         val forecastDay4 = findViewById<TextView>(R.id.forecastDay4)
         val forecastDay5 = findViewById<TextView>(R.id.forecastDay5)
         val background = findViewById<LinearLayout>(R.id.backgroundImage)
+        val iconImageCurrentWeather = findViewById<ImageView>(R.id.imageCurrentWeather)
 
         val greyFilter = PorterDuffColorFilter(Color.BLACK, PorterDuff.Mode.MULTIPLY)
         background.background.setColorFilter(greyFilter)
@@ -60,8 +62,13 @@ class MainActivity : ComponentActivity() {
         backgroundApp.background.setColorFilter(greyDkFilter)
         background.background.setColorFilter(greyFilterBk)
 
-
         val searchBar: AutoCompleteTextView = findViewById(R.id.searchView)
+
+        val forecastImageDay1 = findViewById<ImageView>(R.id.forecastImageDay1)
+        val forecastImageDay2 = findViewById<ImageView>(R.id.forecastImageDay2)
+        val forecastImageDay3 = findViewById<ImageView>(R.id.forecastImageDay3)
+        val forecastImageDay4 = findViewById<ImageView>(R.id.forecastImageDay4)
+        val forecastImageDay5 = findViewById<ImageView>(R.id.forecastImageDay5)
 
 
         val searched = ArrayList<String>();
@@ -114,6 +121,7 @@ class MainActivity : ComponentActivity() {
                 todayMaxTemp.text = "Max. : " + currentTime.tempMax()
                 windSpeed.text = currentTime.wind()
                 uvIndex.text = currentTime.uv()
+                setIconImage(currentTime.icon(),iconImageCurrentWeather)
                 setBackgroundImage(currentTime.icon(), background)
                 background.background.setColorFilter(greyFilterBk)
             }
@@ -134,6 +142,16 @@ class MainActivity : ComponentActivity() {
             forecastDay3.text = currentTime.forecast()[2]
             forecastDay4.text = currentTime.forecast()[3]
             forecastDay5.text = currentTime.forecast()[4]
+
+            setIconImage(currentTime.icon(),iconImageCurrentWeather)
+            setIconImage(currentTime.forecastIcon()[0],forecastImageDay1)
+            setIconImage(currentTime.forecastIcon()[1],forecastImageDay2)
+            setIconImage(currentTime.forecastIcon()[2],forecastImageDay3)
+            setIconImage(currentTime.forecastIcon()[3],forecastImageDay4)
+            setIconImage(currentTime.forecastIcon()[4],forecastImageDay5)
+
+            setBackgroundImage(currentTime.icon(),background)
+            background.background.setColorFilter(greyFilterBk)
         }
 
     }
@@ -149,6 +167,20 @@ class MainActivity : ComponentActivity() {
             "partly-cloudy-night" -> backgroundImage.background = getDrawable(R.drawable.cloudysky);
             "clear-day" -> backgroundImage.background = getDrawable(R.drawable.sunnysky)
             "clear-night" -> backgroundImage.background = getDrawable(R.drawable.nightsky);
+        }
+    }
+
+    fun setIconImage(icon: String, iconImage: ImageView){
+        when (icon) {
+            "snow" -> iconImage.setBackgroundResource(R.drawable.snowflake)
+            "rain" -> iconImage.setBackgroundResource(R.drawable.rainicon)
+            "fog" -> iconImage.setBackgroundResource(R.drawable.fog)
+            "wind" -> iconImage.setBackgroundResource(R.drawable.wind)
+            "cloudy" -> iconImage.setBackgroundResource(R.drawable.cloudy)
+            "partly-cloudy-day" -> iconImage.setBackgroundResource(R.drawable.cloudy)
+            "partly-cloudy-night" -> iconImage.setBackgroundResource(R.drawable.cloudlynight)
+            "clear-day" -> iconImage.setBackgroundResource(R.drawable.sun)
+            "clear-night" -> iconImage.setBackgroundResource(R.drawable.clearnight)
         }
     }
 

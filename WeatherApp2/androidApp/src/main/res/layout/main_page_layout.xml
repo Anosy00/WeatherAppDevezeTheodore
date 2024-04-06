@@ -68,7 +68,7 @@
                     android:layout_height="50dp"
                     android:layout_gravity="center"
                     android:layout_marginRight="25dp"
-                    android:src="@drawable/sun" />
+                    android:id="@+id/imageCurrentWeather" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -154,7 +154,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="98dp"
+                android:layout_height="150dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="15dp"
@@ -167,7 +167,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_marginRight="10dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -177,21 +178,22 @@
                         android:textSize="20dp" />
 
                     <ImageView
+                        android:id="@+id/forecastImageDay1"
                         android:layout_width="match_parent"
-                        android:layout_height="20dp"
-                        android:src="@drawable/sunandcloud" />
+                        android:layout_height="50dp" />
 
                     <TextView
                         android:id="@+id/forecastDay1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"/>
+                        android:layout_gravity="center" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_marginRight="10dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -202,8 +204,8 @@
 
                     <ImageView
                         android:layout_width="match_parent"
-                        android:layout_height="20dp"
-                        android:src="@drawable/sunandcloud" />
+                        android:layout_height="50dp"
+                        android:id="@+id/forecastImageDay2" />
 
                     <TextView
                         android:id="@+id/forecastDay2"
@@ -215,7 +217,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_marginRight="10dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -226,8 +229,8 @@
 
                     <ImageView
                         android:layout_width="match_parent"
-                        android:layout_height="20dp"
-                        android:src="@drawable/sunandcloud" />
+                        android:layout_height="50dp"
+                        android:id="@+id/forecastImageDay3" />
 
                     <TextView
                         android:id="@+id/forecastDay3"
@@ -239,7 +242,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_marginRight="10dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -250,8 +254,8 @@
 
                     <ImageView
                         android:layout_width="match_parent"
-                        android:layout_height="20dp"
-                        android:src="@drawable/sunandcloud" />
+                        android:layout_height="50dp"
+                        android:id="@+id/forecastImageDay4" />
 
                     <TextView
                         android:id="@+id/forecastDay4"
@@ -274,8 +278,8 @@
 
                     <ImageView
                         android:layout_width="match_parent"
-                        android:layout_height="20dp"
-                        android:src="@drawable/sunandcloud" />
+                        android:layout_height="50dp"
+                        android:id="@+id/forecastImageDay5" />
 
                     <TextView
                         android:id="@+id/forecastDay5"
