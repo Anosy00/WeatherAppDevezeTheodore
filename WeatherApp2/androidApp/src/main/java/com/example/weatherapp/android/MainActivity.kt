@@ -96,6 +96,9 @@ class MainActivity : ComponentActivity() {
                             todayMaxTemp.text = "Max. : " + currentTime.tempMax()
                             windSpeed.text = currentTime.wind()
                             uvIndex.text = currentTime.uv()
+                            if (uvIndex.text == "High" || uvIndex.text == "Very high" || uvIndex.text == "Extreme"){
+                                makeAlertIfUvHigh()
+                            }
                             forecastDay1.text = currentTime.forecast()[0]
                             forecastDay2.text = currentTime.forecast()[1]
                             forecastDay3.text = currentTime.forecast()[2]
@@ -122,6 +125,9 @@ class MainActivity : ComponentActivity() {
                         todayMaxTemp.text = "Max. : " + currentTime.tempMax()
                         windSpeed.text = currentTime.wind()
                         uvIndex.text = currentTime.uv()
+                        if (uvIndex.text == "High" || uvIndex.text == "Very high" || uvIndex.text == "Extreme"){
+                            makeAlertIfUvHigh()
+                        }
                         forecastDay1.text = currentTime.forecast()[0]
                         forecastDay2.text = currentTime.forecast()[1]
                         forecastDay3.text = currentTime.forecast()[2]
@@ -152,6 +158,9 @@ class MainActivity : ComponentActivity() {
                             todayMaxTemp.text = "Max. : " + currentTime.tempMax()
                             windSpeed.text = currentTime.wind()
                             uvIndex.text = currentTime.uv()
+                            if (uvIndex.text == "High" || uvIndex.text == "Very high" || uvIndex.text == "Extreme"){
+                                makeAlertIfUvHigh()
+                            }
                             forecastDay1.text = currentTime.forecast()[0]
                             forecastDay2.text = currentTime.forecast()[1]
                             forecastDay3.text = currentTime.forecast()[2]
@@ -178,6 +187,9 @@ class MainActivity : ComponentActivity() {
                         todayMaxTemp.text = "Max. : " + currentTime.tempMax()
                         windSpeed.text = currentTime.wind()
                         uvIndex.text = currentTime.uv()
+                        if (uvIndex.text == "High" || uvIndex.text == "Very high" || uvIndex.text == "Extreme"){
+                            makeAlertIfUvHigh()
+                        }
                         forecastDay1.text = currentTime.forecast()[0]
                         forecastDay2.text = currentTime.forecast()[1]
                         forecastDay3.text = currentTime.forecast()[2]
@@ -206,6 +218,9 @@ class MainActivity : ComponentActivity() {
                     todayMaxTemp.text = "Max. : " + currentTime.tempMax()
                     windSpeed.text = currentTime.wind()
                     uvIndex.text = currentTime.uv()
+                    if (uvIndex.text == "High" || uvIndex.text == "Very high" || uvIndex.text == "Extreme"){
+                        makeAlertIfUvHigh()
+                    }
                     setBackgroundImage(currentTime.icon(), background)
                     background.background.setColorFilter(greyFilterBk)
                 }
@@ -237,6 +252,9 @@ class MainActivity : ComponentActivity() {
                     todayMaxTemp.text = "Max. : " + currentTime.tempMax()
                     windSpeed.text = currentTime.wind()
                     uvIndex.text = currentTime.uv()
+                    if (uvIndex.text == "High" || uvIndex.text == "Very high" || uvIndex.text == "Extreme"){
+                        makeAlertIfUvHigh()
+                    }
                     forecastDay1.text = currentTime.forecast()[0]
                     forecastDay2.text = currentTime.forecast()[1]
                     forecastDay3.text = currentTime.forecast()[2]
@@ -264,6 +282,9 @@ class MainActivity : ComponentActivity() {
                 todayMaxTemp.text = "Max. : " + currentTime.tempMax()
                 windSpeed.text = currentTime.wind()
                 uvIndex.text = currentTime.uv()
+                if (uvIndex.text == "High" || uvIndex.text == "Very high" || uvIndex.text == "Extreme"){
+                    makeAlertIfUvHigh()
+                }
                 forecastDay1.text = currentTime.forecast()[0]
                 forecastDay2.text = currentTime.forecast()[1]
                 forecastDay3.text = currentTime.forecast()[2]
@@ -304,6 +325,9 @@ class MainActivity : ComponentActivity() {
             todayMaxTemp.text = "Max. : " + currentTime.tempMax()
             windSpeed.text = currentTime.wind()
             uvIndex.text = currentTime.uv()
+            if (uvIndex.text == "High" || uvIndex.text == "Very high" || uvIndex.text == "Extreme"){
+                makeAlertIfUvHigh()
+            }
             forecastDay1.text = currentTime.forecast()[0]
             forecastDay2.text = currentTime.forecast()[1]
             forecastDay3.text = currentTime.forecast()[2]
@@ -373,7 +397,12 @@ class MainActivity : ComponentActivity() {
         return if (json.isNotBlank()) json else false.toString()
     }
 
-    fun forecastInfo(){
+    fun makeAlertIfUvHigh(){
+            val builder = AlertDialog.Builder(this@MainActivity)
+            builder.setTitle("Warning")
+            builder.setMessage("UV index is high, be careful")
+            builder.setPositiveButton("OK") { dialog, which -> }
+            builder.show()
 
     }
 }
