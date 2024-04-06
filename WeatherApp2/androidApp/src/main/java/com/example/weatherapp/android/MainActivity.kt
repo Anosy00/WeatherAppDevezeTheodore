@@ -147,13 +147,8 @@ class MainActivity : ComponentActivity() {
                         forecastDay3.text = currentTime.forecast()[2]
                         forecastDay4.text = currentTime.forecast()[3]
                         forecastDay5.text = currentTime.forecast()[4]
-                    }
-                    catch (e: Exception) {
-                        val builder = AlertDialog.Builder(this@MainActivity)
-                        builder.setTitle("Error")
-                        builder.setMessage("City not found")
-                        builder.setPositiveButton("OK") { dialog, which -> }
-                        builder.show()
+                        setBackgroundImage(currentTime.icon(), background)
+                        background.background.setColorFilter(greyFilterBk)
                     }
                 }
             }
@@ -288,7 +283,7 @@ class MainActivity : ComponentActivity() {
                     builder.setPositiveButton("OK") { dialog, which -> }
                     builder.show()
                 }
-        }
+            }
         }
         else {
             val stringJson = readCityNameFromFile();
@@ -309,14 +304,8 @@ class MainActivity : ComponentActivity() {
                 forecastDay3.text = currentTime.forecast()[2]
                 forecastDay4.text = currentTime.forecast()[3]
                 forecastDay5.text = currentTime.forecast()[4]
-                writeCityNameToFile(string)
-            }
-            catch (e: Exception) {
-                val builder = AlertDialog.Builder(this@MainActivity)
-                builder.setTitle("Error")
-                builder.setMessage("City not found")
-                builder.setPositiveButton("OK") { dialog, which -> }
-                builder.show()
+                setBackgroundImage(currentTime.icon(), background)
+                background.background.setColorFilter(greyFilterBk)
             }
         }
 
