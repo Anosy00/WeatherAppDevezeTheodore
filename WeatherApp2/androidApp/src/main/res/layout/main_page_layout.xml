@@ -347,13 +347,14 @@
                         android:layout_height="wrap_content"
                         android:text="City 1 :"
                         android:id="@+id/favoriteCityName1"
-                        android:textSize="20dp" />
+                        android:textSize="13dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:id="@+id/favoriteCityTemp1"
+                        android:textSize="10dp"
                         android:text="15°C" />
                 </LinearLayout>
 
@@ -368,13 +369,14 @@
                         android:layout_height="wrap_content"
                         android:text="City 2 :"
                         android:id="@+id/favoriteCityName2"
-                        android:textSize="20dp" />
+                        android:textSize="13dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:id="@+id/favoriteCityTemp2"
+                        android:textSize="10dp"
                         android:text="15°C" />
                 </LinearLayout>
 
@@ -389,13 +391,14 @@
                         android:layout_height="wrap_content"
                         android:text="City 3 :"
                         android:id="@+id/favoriteCityName3"
-                        android:textSize="20dp" />
+                        android:textSize="13dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:id="@+id/favoriteCityTemp3"
+                        android:textSize="10dp"
                         android:text="15°C" />
                 </LinearLayout>
 
@@ -410,12 +413,13 @@
                         android:layout_height="wrap_content"
                         android:text="City 4 :"
                         android:id="@+id/favoriteCityName4"
-                        android:textSize="20dp" />
+                        android:textSize="13dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/favoriteCityTemp4"
+                        android:textSize="10dp"
                         android:text="15°C" />
                 </LinearLayout>
 
@@ -429,12 +433,13 @@
                         android:layout_height="wrap_content"
                         android:text="City 5 :"
                         android:id="@+id/favoriteCityName5"
-                        android:textSize="20dp" />
+                        android:textSize="13dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/favoriteCityTemp5"
+                        android:textSize="10dp"
                         android:text="15°C" />
                 </LinearLayout>
             </LinearLayout>

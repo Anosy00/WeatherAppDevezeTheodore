@@ -33,11 +33,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
+import kotlin.random.Random
 
 
 class MainActivity : ComponentActivity() {
     val api = WeatherAPI()
-    val cityApi = CityAPI()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_page_layout)
@@ -94,167 +94,7 @@ class MainActivity : ComponentActivity() {
         val favoriteCityTemp4 = findViewById<TextView>(R.id.favoriteCityTemp4)
         val favoriteCityTemp5 = findViewById<TextView>(R.id.favoriteCityTemp5)
 
-
-
-        val searched = ArrayList<String>();
-        searchBar.doOnTextChanged() { text, start, before, count ->
-            try {
-                if (readCityNameFromFile() == "false"){
-                    CoroutineScope(Dispatchers.Main).launch {
-                        try {
-                            val json = JSONObject(api.collectDataFromCity("Limoges"));
-                            val currentTime = CurrentTime(json)
-                            locationWeather.text = currentTime.location()
-                            todayTemp.text = currentTime.dayTemp()
-                            todayMinTemp.text = "Min. : " + currentTime.tempMin()
-                            todayMaxTemp.text = "Max. : " + currentTime.tempMax()
-                            windSpeed.text = currentTime.wind()
-                            uvIndex.text = currentTime.uv()
-                            if (uvIndex.text == "High" || uvIndex.text == "Very high" || uvIndex.text == "Extreme"){
-                                makeAlertIfUvHigh()
-                            }
-                            forecastDay1.text = currentTime.forecast()[0]
-                            forecastDay2.text = currentTime.forecast()[1]
-                            forecastDay3.text = currentTime.forecast()[2]
-                            forecastDay4.text = currentTime.forecast()[3]
-                            forecastDay5.text = currentTime.forecast()[4]
-                        }
-                        catch (e: Exception) {
-                            val builder = AlertDialog.Builder(this@MainActivity)
-                            builder.setTitle("Error")
-                            builder.setMessage("City not found")
-                            builder.setPositiveButton("OK") { dialog, which -> }
-                            builder.show()
-                        }
-                    }
-                }
-                else {
-                    val stringJson = readCityNameFromFile();
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val json = JSONObject(stringJson);
-                        val currentTime = CurrentTime(json)
-                        locationWeather.text = currentTime.location()
-                        todayTemp.text = currentTime.dayTemp()
-                        todayMinTemp.text = "Min. : " + currentTime.tempMin()
-                        todayMaxTemp.text = "Max. : " + currentTime.tempMax()
-                        windSpeed.text = currentTime.wind()
-                        uvIndex.text = currentTime.uv()
-                        if (uvIndex.text == "High" || uvIndex.text == "Very high" || uvIndex.text == "Extreme"){
-                            makeAlertIfUvHigh()
-                        }
-                        forecastDay1.text = currentTime.forecast()[0]
-                        forecastDay2.text = currentTime.forecast()[1]
-                        forecastDay3.text = currentTime.forecast()[2]
-                        forecastDay4.text = currentTime.forecast()[3]
-                        forecastDay5.text = currentTime.forecast()[4]
-                        setBackgroundImage(currentTime.icon(), background)
-                        background.background.setColorFilter(greyFilterBk)
-                    }
-                }
-            }
-            catch (e: Exception){
-                Log.d("Error", e.toString())
-            }
-
-
-        }
-
-        searchBar.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                if (readCityNameFromFile() == "false"){
-                    CoroutineScope(Dispatchers.Main).launch {
-                        try {
-                            val json = JSONObject(api.collectDataFromCity("Limoges"));
-                            val currentTime = CurrentTime(json)
-                            locationWeather.text = currentTime.location()
-                            todayTemp.text = currentTime.dayTemp()
-                            todayMinTemp.text = "Min. : " + currentTime.tempMin()
-                            todayMaxTemp.text = "Max. : " + currentTime.tempMax()
-                            windSpeed.text = currentTime.wind()
-                            uvIndex.text = currentTime.uv()
-                            if (uvIndex.text == "High" || uvIndex.text == "Very high" || uvIndex.text == "Extreme"){
-                                makeAlertIfUvHigh()
-                            }
-                            forecastDay1.text = currentTime.forecast()[0]
-                            forecastDay2.text = currentTime.forecast()[1]
-                            forecastDay3.text = currentTime.forecast()[2]
-                            forecastDay4.text = currentTime.forecast()[3]
-                            forecastDay5.text = currentTime.forecast()[4]
-                        }
-                        catch (e: Exception) {
-                            val builder = AlertDialog.Builder(this@MainActivity)
-                            builder.setTitle("Error")
-                            builder.setMessage("City not found")
-                            builder.setPositiveButton("OK") { dialog, which -> }
-                            builder.show()
-                        }
-                    }
-                }
-                else {
-                    val stringJson = readCityNameFromFile();
-                    CoroutineScope(Dispatchers.Main).launch {
-                        val json = JSONObject(api.collectDataFromCity(stringJson));
-                        val currentTime = CurrentTime(json)
-                        locationWeather.text = currentTime.location()
-                        todayTemp.text = currentTime.dayTemp()
-                        todayMinTemp.text = "Min. : " + currentTime.tempMin()
-                        todayMaxTemp.text = "Max. : " + currentTime.tempMax()
-                        windSpeed.text = currentTime.wind()
-                        uvIndex.text = currentTime.uv()
-                        if (uvIndex.text == "High" || uvIndex.text == "Very high" || uvIndex.text == "Extreme"){
-                            makeAlertIfUvHigh()
-                        }
-                        forecastDay1.text = currentTime.forecast()[0]
-                        forecastDay2.text = currentTime.forecast()[1]
-                        forecastDay3.text = currentTime.forecast()[2]
-                        forecastDay4.text = currentTime.forecast()[3]
-                        forecastDay5.text = currentTime.forecast()[4]
-                        setBackgroundImage(currentTime.icon(), background)
-                        background.background.setColorFilter(greyFilterBk)
-                    }
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                // Do nothing
-            }
-        }
-
-        searchBar.setOnEditorActionListener { v, actionId, event ->
-            CoroutineScope(Dispatchers.Main).launch {
-                try {
-                    val json = JSONObject(api.collectDataFromCity(searchBar.text.toString()));
-                    writeCityNameToFile(api.collectDataFromCity(searchBar.text.toString()))
-                    val currentTime = CurrentTime(json)
-                    locationWeather.text = currentTime.location()
-                    todayTemp.text = currentTime.dayTemp()
-                    todayMinTemp.text = "Min. : " + currentTime.tempMin()
-                    todayMaxTemp.text = "Max. : " + currentTime.tempMax()
-                    windSpeed.text = currentTime.wind()
-                    uvIndex.text = currentTime.uv()
-                    if (uvIndex.text == "High" || uvIndex.text == "Very high" || uvIndex.text == "Extreme"){
-                        makeAlertIfUvHigh()
-                    }
-                    setBackgroundImage(currentTime.icon(), background)
-                    background.background.setColorFilter(greyFilterBk)
-                }
-                catch (e: Exception) {
-                    locationWeather.text = "City not found"
-                    todayTemp.text = ""
-                    todayMinTemp.text = ""
-                    todayMaxTemp.text = ""
-                    windSpeed.text = ""
-                    uvIndex.text = ""
-                    forecastDay1.text = ""
-                    forecastDay2.text = ""
-                    forecastDay3.text = ""
-                    forecastDay4.text = ""
-                    forecastDay5.text = ""
-                }
-            }
-            true
-        }
-        if (readCityNameFromFile() == "false"){
+        if (readFavoriteCityNameFromFile() == "false"){
             CoroutineScope(Dispatchers.Main).launch {
                 try {
                     val string = api.collectDataFromCity("Limoges")
@@ -274,7 +114,16 @@ class MainActivity : ComponentActivity() {
                     forecastDay3.text = currentTime.forecast()[2]
                     forecastDay4.text = currentTime.forecast()[3]
                     forecastDay5.text = currentTime.forecast()[4]
-                    writeCityNameToFile(string)
+
+                    setIconImage(currentTime.icon(),iconImageCurrentWeather)
+                    setIconImage(currentTime.forecastIcon()[0],forecastImageDay1)
+                    setIconImage(currentTime.forecastIcon()[1],forecastImageDay2)
+                    setIconImage(currentTime.forecastIcon()[2],forecastImageDay3)
+                    setIconImage(currentTime.forecastIcon()[3],forecastImageDay4)
+                    setIconImage(currentTime.forecastIcon()[4],forecastImageDay5)
+
+                    setBackgroundImage(currentTime.icon(),background)
+                    background.background.setColorFilter(greyFilterBk)
                 }
                 catch (e: Exception) {
                     val builder = AlertDialog.Builder(this@MainActivity)
@@ -286,9 +135,16 @@ class MainActivity : ComponentActivity() {
             }
         }
         else {
-            val stringJson = readCityNameFromFile();
             CoroutineScope(Dispatchers.Main).launch {
-                val json = JSONObject(stringJson);
+                var lenght = 0
+                if (readFavoriteCityNameFromFile().split("-").size > 5){
+                    lenght = 5
+                }
+                else{
+                    lenght = readFavoriteCityNameFromFile().split("-").size
+                }
+                val string = api.collectDataFromCity(favoriteModelName(Random.nextInt(lenght)))
+                val json = JSONObject(string);
                 val currentTime = CurrentTime(json)
                 locationWeather.text = currentTime.location()
                 todayTemp.text = currentTime.dayTemp()
@@ -304,9 +160,65 @@ class MainActivity : ComponentActivity() {
                 forecastDay3.text = currentTime.forecast()[2]
                 forecastDay4.text = currentTime.forecast()[3]
                 forecastDay5.text = currentTime.forecast()[4]
-                setBackgroundImage(currentTime.icon(), background)
+
+                setIconImage(currentTime.icon(),iconImageCurrentWeather)
+                setIconImage(currentTime.forecastIcon()[0],forecastImageDay1)
+                setIconImage(currentTime.forecastIcon()[1],forecastImageDay2)
+                setIconImage(currentTime.forecastIcon()[2],forecastImageDay3)
+                setIconImage(currentTime.forecastIcon()[3],forecastImageDay4)
+                setIconImage(currentTime.forecastIcon()[4],forecastImageDay5)
+
+                setBackgroundImage(currentTime.icon(),background)
                 background.background.setColorFilter(greyFilterBk)
             }
+        }
+
+        searchBar.setOnEditorActionListener { v, actionId, event ->
+            CoroutineScope(Dispatchers.Main).launch {
+                try {
+                    val json = JSONObject(api.collectDataFromCity(searchBar.text.toString()));
+                    writeCityNameToFile(api.collectDataFromCity(searchBar.text.toString()))
+                    val currentTime = CurrentTime(json)
+                    locationWeather.text = currentTime.location()
+                    todayTemp.text = currentTime.dayTemp()
+                    todayMinTemp.text = "Min. : " + currentTime.tempMin()
+                    todayMaxTemp.text = "Max. : " + currentTime.tempMax()
+                    windSpeed.text = currentTime.wind()
+                    uvIndex.text = currentTime.uv()
+                    if (uvIndex.text == "High" || uvIndex.text == "Very high" || uvIndex.text == "Extreme"){
+                        makeAlertIfUvHigh()
+                    }
+                    forecastDay1.text = currentTime.forecast()[0]
+                    forecastDay2.text = currentTime.forecast()[1]
+                    forecastDay3.text = currentTime.forecast()[2]
+                    forecastDay4.text = currentTime.forecast()[3]
+                    forecastDay5.text = currentTime.forecast()[4]
+
+                    setIconImage(currentTime.icon(),iconImageCurrentWeather)
+                    setIconImage(currentTime.forecastIcon()[0],forecastImageDay1)
+                    setIconImage(currentTime.forecastIcon()[1],forecastImageDay2)
+                    setIconImage(currentTime.forecastIcon()[2],forecastImageDay3)
+                    setIconImage(currentTime.forecastIcon()[3],forecastImageDay4)
+                    setIconImage(currentTime.forecastIcon()[4],forecastImageDay5)
+
+                    setBackgroundImage(currentTime.icon(),background)
+                    background.background.setColorFilter(greyFilterBk)
+                }
+                catch (e: Exception) {
+                    locationWeather.text = "City not found"
+                    todayTemp.text = ""
+                    todayMinTemp.text = ""
+                    todayMaxTemp.text = ""
+                    windSpeed.text = ""
+                    uvIndex.text = ""
+                    forecastDay1.text = ""
+                    forecastDay2.text = ""
+                    forecastDay3.text = ""
+                    forecastDay4.text = ""
+                    forecastDay5.text = ""
+                }
+            }
+            true
         }
 
         searchButton.setOnClickListener {
@@ -324,39 +236,17 @@ class MainActivity : ComponentActivity() {
                 forecastDay3.text = currentTime.forecast()[2]
                 forecastDay4.text = currentTime.forecast()[3]
                 forecastDay5.text = currentTime.forecast()[4]
+
                 setIconImage(currentTime.icon(),iconImageCurrentWeather)
-                setBackgroundImage(currentTime.icon(), background)
+                setIconImage(currentTime.forecastIcon()[0],forecastImageDay1)
+                setIconImage(currentTime.forecastIcon()[1],forecastImageDay2)
+                setIconImage(currentTime.forecastIcon()[2],forecastImageDay3)
+                setIconImage(currentTime.forecastIcon()[3],forecastImageDay4)
+                setIconImage(currentTime.forecastIcon()[4],forecastImageDay5)
+
+                setBackgroundImage(currentTime.icon(),background)
                 background.background.setColorFilter(greyFilterBk)
             }
-        }
-        CoroutineScope(Dispatchers.Main).launch {
-
-            val json = JSONObject(api.collectDataFromCity("Limoges"));
-            val currentTime = CurrentTime(json)
-            locationWeather.text = currentTime.location()
-            todayTemp.text = currentTime.dayTemp()
-            todayMinTemp.text = "Min. : " + currentTime.tempMin()
-            todayMaxTemp.text = "Max. : " + currentTime.tempMax()
-            windSpeed.text = currentTime.wind()
-            uvIndex.text = currentTime.uv()
-            if (uvIndex.text == "High" || uvIndex.text == "Very high" || uvIndex.text == "Extreme"){
-                makeAlertIfUvHigh()
-            }
-            forecastDay1.text = currentTime.forecast()[0]
-            forecastDay2.text = currentTime.forecast()[1]
-            forecastDay3.text = currentTime.forecast()[2]
-            forecastDay4.text = currentTime.forecast()[3]
-            forecastDay5.text = currentTime.forecast()[4]
-
-            setIconImage(currentTime.icon(),iconImageCurrentWeather)
-            setIconImage(currentTime.forecastIcon()[0],forecastImageDay1)
-            setIconImage(currentTime.forecastIcon()[1],forecastImageDay2)
-            setIconImage(currentTime.forecastIcon()[2],forecastImageDay3)
-            setIconImage(currentTime.forecastIcon()[3],forecastImageDay4)
-            setIconImage(currentTime.forecastIcon()[4],forecastImageDay5)
-
-            setBackgroundImage(currentTime.icon(),background)
-            background.background.setColorFilter(greyFilterBk)
         }
 
         if (favoriteModelName(0) == "false"){
