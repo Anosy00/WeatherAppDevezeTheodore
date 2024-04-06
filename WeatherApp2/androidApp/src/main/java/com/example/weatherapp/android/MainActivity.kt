@@ -30,6 +30,7 @@ import com.example.weatherapp.cityapi.CityAPI
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -80,6 +81,19 @@ class MainActivity : ComponentActivity() {
         val forecastImageDay3 = findViewById<ImageView>(R.id.forecastImageDay3)
         val forecastImageDay4 = findViewById<ImageView>(R.id.forecastImageDay4)
         val forecastImageDay5 = findViewById<ImageView>(R.id.forecastImageDay5)
+
+        val favoriteCityName1 = findViewById<TextView>(R.id.favoriteCityName1)
+        val favoriteCityName2 = findViewById<TextView>(R.id.favoriteCityName2)
+        val favoriteCityName3 = findViewById<TextView>(R.id.favoriteCityName3)
+        val favoriteCityName4 = findViewById<TextView>(R.id.favoriteCityName4)
+        val favoriteCityName5 = findViewById<TextView>(R.id.favoriteCityName5)
+
+        val favoriteCityTemp1 = findViewById<TextView>(R.id.favoriteCityTemp1)
+        val favoriteCityTemp2 = findViewById<TextView>(R.id.favoriteCityTemp2)
+        val favoriteCityTemp3 = findViewById<TextView>(R.id.favoriteCityTemp3)
+        val favoriteCityTemp4 = findViewById<TextView>(R.id.favoriteCityTemp4)
+        val favoriteCityTemp5 = findViewById<TextView>(R.id.favoriteCityTemp5)
+
 
 
         val searched = ArrayList<String>();
@@ -133,8 +147,13 @@ class MainActivity : ComponentActivity() {
                         forecastDay3.text = currentTime.forecast()[2]
                         forecastDay4.text = currentTime.forecast()[3]
                         forecastDay5.text = currentTime.forecast()[4]
-                        setBackgroundImage(currentTime.icon(), background)
-                        background.background.setColorFilter(greyFilterBk)
+                    }
+                    catch (e: Exception) {
+                        val builder = AlertDialog.Builder(this@MainActivity)
+                        builder.setTitle("Error")
+                        builder.setMessage("City not found")
+                        builder.setPositiveButton("OK") { dialog, which -> }
+                        builder.show()
                     }
                 }
             }
@@ -290,8 +309,14 @@ class MainActivity : ComponentActivity() {
                 forecastDay3.text = currentTime.forecast()[2]
                 forecastDay4.text = currentTime.forecast()[3]
                 forecastDay5.text = currentTime.forecast()[4]
-                setBackgroundImage(currentTime.icon(), background)
-                background.background.setColorFilter(greyFilterBk)
+                writeCityNameToFile(string)
+            }
+            catch (e: Exception) {
+                val builder = AlertDialog.Builder(this@MainActivity)
+                builder.setTitle("Error")
+                builder.setMessage("City not found")
+                builder.setPositiveButton("OK") { dialog, which -> }
+                builder.show()
             }
         }
 
@@ -344,7 +369,52 @@ class MainActivity : ComponentActivity() {
             setBackgroundImage(currentTime.icon(),background)
             background.background.setColorFilter(greyFilterBk)
         }
+        favoriteCityName1.text = favoriteModelName(0)
+        favoriteCityName2.text = favoriteModelName(1)
+        favoriteCityName3.text = favoriteModelName(2)
+        favoriteCityName4.text = favoriteModelName(3)
+        favoriteCityName5.text = favoriteModelName(4)
 
+        CoroutineScope(Dispatchers.Main).launch {
+            favoriteCityTemp1.text = favoriteModelTemp(0)
+            favoriteCityTemp2.text = favoriteModelTemp(1)
+            favoriteCityTemp3.text = favoriteModelTemp(2)
+            favoriteCityTemp4.text = favoriteModelTemp(3)
+            favoriteCityTemp5.text = favoriteModelTemp(4)
+        }
+    }
+
+    private fun favoriteModelName(index : Int) : String{
+        try {
+            val list = readFavoriteCityNameFromFile().split("-")
+            return list[index]
+        }catch (e : Exception){
+            return "/"
+        }
+    }
+    private suspend fun favoriteModelTemp(index : Int) : String{
+        try {
+            val list = readFavoriteCityNameFromFile().split("-")
+            val json = withContext(Dispatchers.IO) {
+                JSONObject(api.collectDataFromCity(list[index]))
+            }
+            val currentTime = CurrentTime(json)
+            return currentTime.dayTemp()
+        }catch (e : Exception){
+            return "Error"
+        }
+    }
+
+    fun readFavoriteCityNameFromFile(): String {
+        var list = ""
+        try {
+            openFileInput("favorite.txt").use {
+                list = it.bufferedReader().readText()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return if (list.isNotBlank()) list else false.toString()
     }
 
     fun setBackgroundImage(icon: String, backgroundImage: LinearLayout){
