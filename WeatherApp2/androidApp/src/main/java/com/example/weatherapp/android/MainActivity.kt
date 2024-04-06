@@ -358,14 +358,25 @@ class MainActivity : ComponentActivity() {
             setBackgroundImage(currentTime.icon(),background)
             background.background.setColorFilter(greyFilterBk)
         }
-        favoriteCityName1.text = favoriteModelName(0)
+
+        if (favoriteModelName(0) == "false"){
+            favoriteCityName1.text = "/"
+        }
+        else{
+            favoriteCityName1.text = favoriteModelName(0);
+        }
         favoriteCityName2.text = favoriteModelName(1)
         favoriteCityName3.text = favoriteModelName(2)
         favoriteCityName4.text = favoriteModelName(3)
         favoriteCityName5.text = favoriteModelName(4)
 
         CoroutineScope(Dispatchers.Main).launch {
-            favoriteCityTemp1.text = favoriteModelTemp(0)
+            if (favoriteModelName(0) == "false"){
+                favoriteCityTemp1.text = "Error"
+            }
+            else{
+                favoriteCityTemp1.text = favoriteModelTemp(0);
+            }
             favoriteCityTemp2.text = favoriteModelTemp(1)
             favoriteCityTemp3.text = favoriteModelTemp(2)
             favoriteCityTemp4.text = favoriteModelTemp(3)
