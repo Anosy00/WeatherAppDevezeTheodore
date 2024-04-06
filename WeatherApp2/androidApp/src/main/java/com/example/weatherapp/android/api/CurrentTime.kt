@@ -12,7 +12,9 @@ class CurrentTime constructor(jsonObject: JSONObject){
     }
 
     fun location(): String{
-        return jsonApi.get("address").toString()
+        val chain : String = jsonApi.get("resolvedAddress").toString()
+        val city = chain.split(",")[0].trim()
+        return city
     }
 
     fun tempMin() : String{
@@ -69,5 +71,15 @@ class CurrentTime constructor(jsonObject: JSONObject){
 
     fun icon(): String{
         return currentWeather.get("icon").toString()
+    }
+
+    fun forecastIcon() : Array<String>{
+        val details = JSONArray(jsonApi.getString("days"))
+        val forecast5days = arrayOf(details.getJSONObject(1).getString("icon"),
+            details.getJSONObject(2).getString("icon"),
+            details.getJSONObject(3).getString("icon"),
+            details.getJSONObject(4).getString("icon"),
+            details.getJSONObject(5).getString("icon"))
+        return forecast5days;
     }
 }
